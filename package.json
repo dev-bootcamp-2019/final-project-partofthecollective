@@ -1,0 +1,36 @@
+{
+  "name": "final-project-partofthecollective",
+  "version": "1.0.0",
+  "description": "Final project",
+  "main": "gulpfile.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "gulp-cli": "^2.0.1",
+    "gulp-if": "^2.0.2",
+    "gulp-run": "^1.7.1",
+    "gulp-util": "^3.0.8",
+    "minimist": "^1.2.0",
+    "web3": "^1.0.0-beta.33"
+  },
+  "devDependencies": {
+    "gulp": "^4.0.0",
+    "gulp-concat": "^2.6.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "ganache": "ganache-cli --defaultBalanceEther 10000"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/partofthecollective/final-project-partofthecollective.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/partofthecollective/final-project-partofthecollective/issues"
+  },
+  "homepage": "https://github.com/partofthecollective/final-project-partofthecollective#readme"
+}
