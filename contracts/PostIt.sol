@@ -10,7 +10,7 @@ contract PostIt {
   uint256[] public postsIndexes;
   address[] public upVotersIndexes;
   address[] public downVotersIndexes;
-  address[] public commentsIndexes;
+  uint256[] public commentsIndexes;
 
   struct User {
     string firstName;
@@ -27,22 +27,24 @@ contract PostIt {
     address payable accountAddress;
     mapping (address => User) upVoters;
     mapping (address => User) downVoters;
-    mapping (address => User) comments;
+    mapping (uint256 => Comment) comments;
   }
 
   struct Comment {
-    string response;
-    mapping (address => User) comments;
+    uint256 postId;
+    string commentBody;
+    mapping (address => User) commenters;
   }
 
   uint256 postId;
-  uint256 userId;
+  uint256 commentId;
   address public owner;
 
   event LogEnrolled(address accountAddress);
-  event LogNewPostAdded(uint postId, string title, string fullName, address accountAddress);
-  event LogUpVote(uint postId, string title, uint votes, string fullName, address accountAddress);
-  event LogDownVote(uint postId, string title, uint votes, string fullName, address accountAddress);
+  event LogNewPostAdded(uint256 postId, string title, string fullName, address accountAddress);
+  event LogUpVote(uint256 postId, string title, uint votes, string fullName, address accountAddress);
+  event LogDownVote(uint256 postId, string title, uint votes, string fullName, address accountAddress);
+  event LogComment(uint256 postId, uint256 commentId, string commentBody, string fullName, address accountAddress);
 
   modifier onlyOwner () { require (msg.sender == owner, "You are not the owner."); _;}
   modifier notPostAuthor (uint256 _postId) { require (posts[_postId].accountAddress != msg.sender, "You are the post author."); _;}
@@ -51,6 +53,7 @@ contract PostIt {
   constructor() public {
     owner = msg.sender;
     postId = 1;
+    commentId = 1;
   }
 
   //Add a check to make sure the address is not bound aleady
@@ -68,8 +71,8 @@ contract PostIt {
   function addPostIt(string memory title, string memory content, uint vote) public returns(bool) {
     posts[postId] = Post({title: title, content: content, votes: vote, author: string(abi.encodePacked(userProfiles[msg.sender].firstName, " ", userProfiles[msg.sender].lastName)),  accountAddress: msg.sender});
     emit LogNewPostAdded(postId, title, string(abi.encodePacked(userProfiles[msg.sender].firstName, " ", userProfiles[msg.sender].lastName)), msg.sender);
-    postId = postId + 1;
     postsIndexes.push(postId);
+    postId = postId + 1;
     return true;
   }
 
@@ -95,6 +98,15 @@ contract PostIt {
     return msg.sender;
   }
 
+  function addComment(uint256 _postId, string memory commentBody) public returns(bool) {
+    posts[postId].comments[commentId] = Comment({postId: _postId, commentBody: commentBody});
+    posts[postId].comments[commentId].commenters[msg.sender] = userProfiles[msg.sender];
+    emit LogComment(postId, commentId, commentBody, string(abi.encodePacked(userProfiles[msg.sender].firstName, " ", userProfiles[msg.sender].lastName)), msg.sender);
+    commentsIndexes.push(commentId);
+    commentId = commentId + 1;
+    return true;
+  }
+
   function getAllPosts() external view returns(uint256[] memory) {
     return postsIndexes;
   }
@@ -105,6 +117,10 @@ contract PostIt {
 
   function getAllDownVoters() external view returns(address[] memory) {
     return downVotersIndexes;
+  }
+
+  function getAllComments() external view returns(uint256[] memory) {
+    return commentsIndexes;
   }
 
   function() external {

@@ -22,8 +22,10 @@ contract('PostIt', function(accounts) {
   const postContent = "Lorem ipsum tortor dolor malesuada rhoncus pellentesque orci nisl, at cras torquent sapien nam ad ligula, condimentum interdum sapien ipsum hac dictumst sociosqu. Sed pulvinar accumsan tristique justo vel netus nibh, feugiat mauris rhoncus nostra duis proin praesent nisi, porta rhoncus tellus accumsan ac integer. Luctus mauris porta sit non cursus laoreet duis quisque aliquam morbi pretium, tempus litora maecenas potenti facilisis pretium quis hendrerit egestas himenaeos. Risus mauris scelerisque pharetra hac a ligula aenean, mollis molestie nunc consectetur hac aliquam luctus, sociosqu blandit nec inceptos est primis.Pulvinar aliquam odio tellus iaculis ipsum tellus sagittis lorem, mauris vestibulum sem vitae enim pulvinar magna mi eu, quisque inceptos vestibulum cubilia nisl facilisis quisque.";
   const vote = 1;
   const authorName = `${fName1} ${lName1}`;
+  const commentBody = 'This is a test comment to a post.';
 
   let postId;
+  let commentId;
 
   it("mark addresses as enrolled", async () => {
     const postIt = await PostIt.deployed();
@@ -130,5 +132,21 @@ contract('PostIt', function(accounts) {
     const allDownVoters = await postIt.getAllDownVoters({from: account1});
     const hasDownVotes = allDownVoters.length > 0;
     assert.equal(hasDownVotes, true, 'there appears to be no posts created?');
+  });
+
+  it("should make a comment to a post", async () => {
+    const postIt = await PostIt.deployed();
+
+    const commentAdded = await postIt.addComment(postId, commentBody, {from: account1});
+    let eventEmitted = false;
+
+    if (commentAdded.logs[0].event === "LogComment") {
+      commentId = commentAdded.logs[0].args.commentId.toString(10);
+      commentAddedBody = commentAdded.logs[0].args.commentBody.toString(10);
+      eventEmitted = true;
+    }
+
+    assert.equal(commentAddedBody, commentBody, 'the new comment body did not match.');
+    assert.equal(eventEmitted, true, 'the new comment event was not emitted.');
   });
 });
