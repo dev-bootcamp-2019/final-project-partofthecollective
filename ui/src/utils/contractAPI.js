@@ -48,7 +48,7 @@ export const callMethodGetAllPosts = async (postIt, accountAddress) => {
           });
         });
     }
-    return postData.filter((data) => data.title != '');
+    return postData.filter((data) => data.title !== '');
   } catch(e) {
     //console.log(e);
     return { success: false, message: e };
@@ -103,4 +103,37 @@ export const callMethodMakeDownVote = async (postIt, postId, accountAddress) => 
     //console.log(e);
     return { success: false, message: e };
   }
+}
+
+export const callEventsByName = async (postIt, name, passedFilter) => {
+  if (!postIt) {
+    return;
+  }
+  const filter = passedFilter || {};
+  let data = [];
+  let loggedEvent;
+  switch (name) {
+    case 'posts':
+      loggedEvent = postIt.LogNewPostAdded(filter, { fromBlock: 0, toBlock: 'latest' });
+      break;
+
+    case 'comments':
+      loggedEvent = postIt.LogComment(filter, { fromBlock: 0, toBlock: 'latest' });
+      break;
+
+    default:
+      loggedEvent = postIt.allEvents(filter, { fromBlock: 0, toBlock: 'latest' });
+      break;
+  }
+
+  return new Promise((resolve, reject) => {
+    loggedEvent.get((error, logs) => {
+      if (error) {
+        reject(error);
+      }
+      logs.map((log) => data.push(log.args));
+      //console.log(data);
+      resolve(data);
+    });
+  });
 }

@@ -12,6 +12,7 @@ import {
 
 import Dashboard from './Dashboard';
 import NewPost from './NewPost';
+import PostDetails from './PostDetails';
 import NotFound from './NotFound';
 
 class HomePage extends Component {
@@ -29,7 +30,7 @@ class HomePage extends Component {
             dispatch(getAllPostItPosts(posts));
             this.setState({ loaded: true });
           }
-      });
+        });
     }
   }
 
@@ -47,6 +48,7 @@ class HomePage extends Component {
           <Fragment>
             <Switch>
               <Route path='/add' exact component={NewPost} />
+              <Route path='/posts/:post_id' component={PostDetails} />
               <Route path='/' exact render={(props) => <Dashboard {...props} authedUser={authedUser} ethContract={ethContract} dispatch={dispatch}  posts={posts} />} />
               <Route path='/404' exact component={NotFound} />
               <Route component={NotFound} />

@@ -6,7 +6,6 @@ import Post from './Post';
 const Dashboard = (props) => {
   const { authedUser, ethContract, dispatch, posts } = props;
   const sortedPosts = Object.values(posts).sort((a,b) => b.votes - a.votes);
-  console.log(sortedPosts);
   return (
     <div>
       {authedUser ?
