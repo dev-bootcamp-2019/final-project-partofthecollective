@@ -1,4 +1,4 @@
-#Final project ~ aka PostIt
+# Final project ~ aka PostIt
 
 ## Description
 This project was inspired as a kind of Reddit clone (called PostIt), which allows you to make a post (sans category), up vote, or down vote a post, and/or reward the author. The economics of this application isn't based on real use, but more reflects the connection of the appliation to the blockchain and your account address. This application utilizes MetaMask for identity based on your blockchain account address and your email. This application has one smart contract named PostIt.sol with the following functionality:
@@ -10,7 +10,7 @@ This project was inspired as a kind of Reddit clone (called PostIt), which allow
 - Comments to a post - **UI Work in Progress, but functionality exists in smart contrat tests and smart contract**
 - Post/comment event logging and reading by UI.
 
-##Environement
+## Environement
 - Developed on a Mac OS 
 - nodejs v9.2.1
 - Truffle v5.0.0
@@ -213,7 +213,7 @@ web3.eth.sendTransaction({from:  "GANACHE_ACCOUNT", to: "YOUR_METAMASK_ACCOUNT",
 
 
 
-##TODO
+## TODO
 - ~~Update README.md~~
   - ~~Add steps to set up dApp~~
 - ~~Document and add comment to code~~
