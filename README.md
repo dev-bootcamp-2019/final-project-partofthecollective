@@ -11,7 +11,7 @@ This project was inspired as a kind of Reddit clone (called PostIt), which allow
 - Post/comment event logging and reading by UI.
 
 ## Environement
-- Developed on a Mac OS 
+- Developed on a Mac OS, I tried but had issues with the Ubuntu VM - it should work though.
 - nodejs v9.2.1
 - Truffle v5.0.0
 - Ganache-CLI v6.2.5
