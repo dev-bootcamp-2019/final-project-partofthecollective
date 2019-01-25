@@ -20,7 +20,7 @@ This project was inspired as a kind of Reddit clone (called PostIt), which allow
 - MetaMask v5.3.1
 - React [react-create-app](https://github.com/facebook/create-react-app)
 
-## Get started
+## Getting started
 1. Assuming you have dependencies installed listed above in the `Environment` section. 
 2. Clone application and go into the cloned project directory.
     - Run `npm install` in project root directory and in the `ui` directory.
