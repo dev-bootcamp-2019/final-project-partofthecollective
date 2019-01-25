@@ -86,7 +86,7 @@ contract PostIt {
   /** @dev Add a post.
     * @param title of a Post.
     * @param content of a Post.
-    * @param default vote of a Post.
+    * @param vote of a Post.
     * @return a bool.
     */
   function addPostIt(string memory title, string memory content, uint vote) public returns(bool) {
@@ -98,7 +98,7 @@ contract PostIt {
   }
 
   /** @dev Get a post.
-    * @param postId of a Post.
+    * @param _postId of a Post.
     * @return a array with postId, title, content, votes, author, accountAddress (of author).
     */
   function getPost(uint256 _postId) public view returns(uint256, string memory, string memory, uint, string memory, address) {
@@ -106,7 +106,7 @@ contract PostIt {
   }
 
   /** @dev Vote up a post, if you're not the author.
-    * @param postId of a Post.
+    * @param _postId of a Post.
     * @return a address of the user.
     */
   function makeUpVote(uint256 _postId) notPostAuthor(_postId) public returns(address) {
@@ -119,7 +119,7 @@ contract PostIt {
   }
 
   /** @dev Vote down a post, if you're not the author.
-    * @param postId of a Post.
+    * @param _postId of a Post.
     * @return a address of the user.
     */
   function makeDownVote(uint256 _postId) notPostAuthor(_postId) public returns(address) {
@@ -132,7 +132,7 @@ contract PostIt {
   }
 
   /** @dev Add a comment to a post.
-    * @param postId of a Post.
+    * @param _postId of a Post.
     * @param commentBody of the comment.
     * @return a bool.
     */
