@@ -1,4 +1,12 @@
-
+/**
+ * async method callMethodEnroll
+ * @param postIt
+ * @param firstName
+ * @param lastName
+ * @param email
+ * @param accountAddress
+ * @returns {Promise.<*>}
+ */
 export const callMethodEnroll = async (postIt, firstName, lastName, email, accountAddress) => {
   try {
     const tx = await postIt.enroll(firstName, lastName, email, { from: accountAddress });
@@ -7,8 +15,15 @@ export const callMethodEnroll = async (postIt, firstName, lastName, email, accou
     //console.log(e);
     return { success: false, message: 'Error: There was a problem with your registration.' };
   }
-}
+};
 
+/**
+ * async method callMethodIsEnrolled
+ * @param postIt
+ * @param email
+ * @param accountAddress
+ * @returns {Promise.<*>}
+ */
 export const callMethodIsEnrolled = async (postIt, email, accountAddress) => {
   try {
     const isEnrolled = await postIt.enrolled(accountAddress, { from: accountAddress });
@@ -23,8 +38,14 @@ export const callMethodIsEnrolled = async (postIt, email, accountAddress) => {
     //console.log(e);
     return { success: false, message: e };
   }
-}
+};
 
+/**
+ * async method callMethodGetAllPosts
+ * @param postIt
+ * @param accountAddress
+ * @returns {Promise.<*>}
+ */
 export const callMethodGetAllPosts = async (postIt, accountAddress) => {
   if (!postIt) {
     return;
@@ -53,8 +74,16 @@ export const callMethodGetAllPosts = async (postIt, accountAddress) => {
     //console.log(e);
     return { success: false, message: e };
   }
-}
+};
 
+/**
+ * async method callMethodAddPost
+ * @param postIt
+ * @param postTitle
+ * @param postContent
+ * @param accountAddress
+ * @returns {Promise.<*>}
+ */
 export const callMethodAddPost = async (postIt, postTitle, postContent, accountAddress) => {
   try {
     const tx = await postIt.addPostIt(postTitle, postContent, 0, { from: accountAddress });
@@ -63,8 +92,14 @@ export const callMethodAddPost = async (postIt, postTitle, postContent, accountA
     //console.log(e);
     return { success: false, message: e };
   }
-}
+};
 
+/**
+ * async method callMethodGetPost
+ * @param postIt
+ * @param postId
+ * @returns {Promise.<*>}
+ */
 export const callMethodGetPost = async (postIt, postId) => {
   try {
     const post = await postIt.getPost(postId);
@@ -73,8 +108,14 @@ export const callMethodGetPost = async (postIt, postId) => {
     //console.log(e);
     return { success: false, message: e };
   }
-}
+};
 
+/**
+ * async method callMethodGetUserProfile
+ * @param postIt
+ * @param accountAddress
+ * @returns {Promise.<*>}
+ */
 export const callMethodGetUserProfile = async (postIt, accountAddress) => {
   try {
     const userProfile = await postIt.getUserProfile({ from: accountAddress });
@@ -83,8 +124,15 @@ export const callMethodGetUserProfile = async (postIt, accountAddress) => {
     //console.log(e);
     return { success: false, message: e };
   }
-}
+};
 
+/**
+ * async method callMethodMakeUpVote
+ * @param postIt
+ * @param postId
+ * @param accountAddress
+ * @returns {Promise.<*>}
+ */
 export const callMethodMakeUpVote = async (postIt, postId, accountAddress) => {
   try {
     const tx = await postIt.makeUpVote(postId, { from: accountAddress });
@@ -93,8 +141,15 @@ export const callMethodMakeUpVote = async (postIt, postId, accountAddress) => {
     //console.log(e);
     return { success: false, message: e };
   }
-}
+};
 
+/**
+ * async method callMethodMakeDownVote
+ * @param postIt
+ * @param postId
+ * @param accountAddress
+ * @returns {Promise.<*>}
+ */
 export const callMethodMakeDownVote = async (postIt, postId, accountAddress) => {
   try {
     const tx = await postIt.makeDownVote(postId, { from: accountAddress });
@@ -103,8 +158,15 @@ export const callMethodMakeDownVote = async (postIt, postId, accountAddress) => 
     //console.log(e);
     return { success: false, message: e };
   }
-}
+};
 
+/**
+ * async method callEventsByName
+ * @param postIt
+ * @param name
+ * @param passedFilter
+ * @returns {Promise}
+ */
 export const callEventsByName = async (postIt, name, passedFilter) => {
   if (!postIt) {
     return;
@@ -136,4 +198,4 @@ export const callEventsByName = async (postIt, name, passedFilter) => {
       resolve(data);
     });
   });
-}
+};

@@ -1,9 +1,16 @@
+/**
+ * Package imports
+ */
 import Web3 from 'web3';
 import contract from 'truffle-contract';
 
 import PostItContract from '../contractBuilds/contracts/PostIt.json';
 import { rpcConfig } from '../config/config';
 
+/**
+ * Constants
+ * @type {string}
+ */
 export const WEB3_CONNECTED = 'WEB3_CONNECTED';
 export const WEB3_DISCONNECTED = 'WEB3_DISCONNECTED';
 export const POSTIT_CONTRACT_INSTANTIATED = 'POSTIT_CONTRACT_INSTANTIATED';
@@ -12,6 +19,10 @@ export const POSTIT_POST_ADDED = 'POSTIT_POST_ADDED';
 export const WEB3_CONNECTED_ACCOUNT_SET = 'WEB3_CONNECTED_ACCOUNT_SET';
 export const POSTIT_SET_LAST_TRANSACTION = 'POSTIT_SET_LAST_TRANSACTION';
 
+/**
+ * Initialized state
+ * @type {{web3: null, user: null, authedUser: null, post: null, posts: Array, accountAddress: null, lastTransaction: null}}
+ */
 export const initialState = {
   web3: null,
   user: null,
@@ -22,6 +33,11 @@ export const initialState = {
   lastTransaction: null,
 };
 
+/**
+ * web3Connect action
+ * @param dispatch
+ * @returns {*}
+ */
 export function web3connect(dispatch) {
   const web3 = window.ethereum;
   let web3Instance;
@@ -45,6 +61,12 @@ export function web3connect(dispatch) {
   return web3Instance;
 }
 
+/**
+ * instantiatePostItContract action
+ * @param dispatch
+ * @param web3
+ * @returns {Q.Promise<any> | Promise.<T>}
+ */
 export function instantiatePostItContract(dispatch, web3) {
   const postIt = contract(PostItContract);
   postIt.setProvider(web3.currentProvider);
@@ -61,6 +83,11 @@ export function instantiatePostItContract(dispatch, web3) {
   }).catch((e) => { console.log(e); });
 }
 
+/**
+ * getMetaMaskAccount action
+ * @param dispatch
+ * @param web3
+ */
 export function getMetaMaskAccount(dispatch, web3) {
   if (web3) {
     web3.eth.getAccounts((err, accounts) => {
@@ -75,6 +102,11 @@ export function getMetaMaskAccount(dispatch, web3) {
   }
 }
 
+/**
+ * getAllPostItPosts action
+ * @param posts
+ * @returns {function(*)}
+ */
 export function getAllPostItPosts(posts) {
   return (dispatch) => {
     try {
@@ -89,6 +121,11 @@ export function getAllPostItPosts(posts) {
   }
 }
 
+/**
+ * addNewPost action
+ * @param post
+ * @returns {function(*)}
+ */
 export function addNewPost(post) {
   return (dispatch) => {
     try {
@@ -102,6 +139,11 @@ export function addNewPost(post) {
   }
 }
 
+/**
+ * setLastTransaction action
+ * @param transaction
+ * @returns {function(*)}
+ */
 export function setLastTransaction(transaction) {
   return (dispatch) => {
     try {

@@ -27,6 +27,10 @@ contract('PostIt', function(accounts) {
   let postId;
   let commentId;
 
+
+  /**
+   * Tests to test enrollment.
+   */
   it("mark addresses as enrolled", async () => {
     const postIt = await PostIt.deployed();
 
@@ -40,6 +44,10 @@ contract('PostIt', function(accounts) {
     assert.equal(ownerEnrolled, false, 'only enrolled users should be marked enrolled');
   });
 
+
+  /**
+   * Tests for getting a user profile.
+   */
   it("match stored user profile", async () => {
     const postIt = await PostIt.deployed();
 
@@ -56,12 +64,15 @@ contract('PostIt', function(accounts) {
     assert.equal(getUser[3], account2, 'the user account address does not appear to match.');
   });
 
+  /**
+   * Tests to add a new PostIt post.
+   */
   it("should be able to add a post", async () => {
     const postIt = await PostIt.deployed();
 
     const postAdded = await postIt.addPostIt(postTitle, postContent, vote, {from: account1});
     let eventEmitted = false;
-    
+
     if (postAdded.logs[0].event === "LogNewPostAdded") {
       postId = postAdded.logs[0].args.postId.toString(10);
       eventEmitted = true;
@@ -70,6 +81,10 @@ contract('PostIt', function(accounts) {
     assert.equal(eventEmitted, true, 'the new post added event was not emitted.');
   });
 
+
+  /**
+   * Tests to vote up a post.
+   */
   it("should be able to up vote a post", async () => {
     const postIt = await PostIt.deployed();
 
@@ -84,6 +99,9 @@ contract('PostIt', function(accounts) {
     assert.equal(eventEmitted, true, 'the post up vote event was not emitted.');
   });
 
+  /**
+   * Tests to vote down a post.
+   */
   it("should be able to down vote a post", async () => {
     const postIt = await PostIt.deployed();
 
@@ -98,6 +116,9 @@ contract('PostIt', function(accounts) {
     assert.equal(eventEmitted, true, 'the post down vote event was not emitted.');
   });
 
+  /**
+   * Tests to get a post by it's postId.
+   */
   it("should get a post by id", async () => {
     const postIt = await PostIt.deployed();
     const result = await postIt.getPost(postId);
@@ -110,6 +131,9 @@ contract('PostIt', function(accounts) {
     assert.equal(result[5], account1, 'the post author address did not match.');
   });
 
+  /**
+   * Test to get all the posts.
+   */
   it("should get all posts", async () => {
     const postIt = await PostIt.deployed();
 
@@ -118,6 +142,9 @@ contract('PostIt', function(accounts) {
     assert.equal(hasPosts, true, 'there appears to be no posts created?');
   });
 
+  /**
+   * Tests to get all indexed up votes.
+   */
   it("should get all up voters", async () => {
     const postIt = await PostIt.deployed();
 
@@ -126,6 +153,9 @@ contract('PostIt', function(accounts) {
     assert.equal(hasUpVotes, true, 'there appears to be no posts created?');
   });
 
+  /**
+   * Tests to get all indexed down voters.
+   */
   it("should get all down voters", async () => {
     const postIt = await PostIt.deployed();
 
@@ -134,6 +164,9 @@ contract('PostIt', function(accounts) {
     assert.equal(hasDownVotes, true, 'there appears to be no posts created?');
   });
 
+  /**
+   * Test to make a comment on a post.
+   */
   it("should make a comment to a post", async () => {
     const postIt = await PostIt.deployed();
 

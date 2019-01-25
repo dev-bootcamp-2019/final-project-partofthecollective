@@ -1,11 +1,24 @@
+/**
+ * imports
+ */
 import { toast } from 'react-toastify';
 
+/**
+ * helper method formatDate
+ * @param timestamp
+ * @returns {string}
+ */
 export const formatDate = (timestamp) => {
   const d = new Date(timestamp);
   const time = d.toLocaleTimeString('en-US');
   return time.substr(0, 5) + time.slice(-2) + ' | ' + d.toLocaleDateString();
 };
 
+/**
+ * helper method notify - toastify
+ * @param message
+ * @param type
+ */
 export const notify = (message, type) =>  {
   const toastifySettings = {
     position: "top-right",
@@ -27,5 +40,5 @@ export const notify = (message, type) =>  {
     default:
       toast.info(message, toastifySettings);
   }
-}
+};
 

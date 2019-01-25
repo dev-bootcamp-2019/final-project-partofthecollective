@@ -22,7 +22,7 @@ class HomePage extends Component {
 
   componentDidUpdate() {
     const { authedUser, ethContract, accountAddress, dispatch } = this.props;
-    const userAddress = (accountAddress) ? accountAddress : authedUser.accountAddress; 
+    const userAddress = (accountAddress) ? accountAddress : authedUser.accountAddress;
     if (!this.state.loaded) {
       callMethodGetAllPosts(ethContract.postItContract, userAddress)
         .then((posts) => {
@@ -48,7 +48,8 @@ class HomePage extends Component {
           <Fragment>
             <Switch>
               <Route path='/add' exact component={NewPost} />
-              <Route path='/posts/:post_id' component={PostDetails} />
+              {/*post details route work in progress, but not enough time to complete*/}
+              {/*<Route path='/posts/:post_id' component={PostDetails} />*/}
               <Route path='/' exact render={(props) => <Dashboard {...props} authedUser={authedUser} ethContract={ethContract} dispatch={dispatch}  posts={posts} />} />
               <Route path='/404' exact component={NotFound} />
               <Route component={NotFound} />
