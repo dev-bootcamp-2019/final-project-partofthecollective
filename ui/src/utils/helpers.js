@@ -42,3 +42,25 @@ export const notify = (message, type) =>  {
   }
 };
 
+/**
+ * tipAuthor async method
+ * @param web3
+ * @param from
+ * @param to
+ * @returns {Promise.<void>}
+ */
+export const tipAuthor = async (web3, from, to) => {
+  if (from === to) {
+    notify('You can not tip yourself, because you are the author :)', 'error');
+  } else {
+    let tx = await web3.eth.sendTransaction({
+      from: from,
+      to: to,
+      value: web3.utils.toWei(".0010", "ether")
+    });
+    if (tx && tx.transactionHash) {
+      notify(`Tip sent to author at: ${to}`, 'success');
+    }
+  }
+};
+

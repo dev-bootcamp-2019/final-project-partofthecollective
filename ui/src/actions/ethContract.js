@@ -16,6 +16,7 @@ export const WEB3_DISCONNECTED = 'WEB3_DISCONNECTED';
 export const POSTIT_CONTRACT_INSTANTIATED = 'POSTIT_CONTRACT_INSTANTIATED';
 export const POSTIT_POSTS_FETCHED = 'POSTIT_POSTS_FETCHED';
 export const POSTIT_POST_ADDED = 'POSTIT_POST_ADDED';
+export const POSTIT_GET_POST = 'POSTIT_GET_POST';
 export const WEB3_CONNECTED_ACCOUNT_SET = 'WEB3_CONNECTED_ACCOUNT_SET';
 export const POSTIT_SET_LAST_TRANSACTION = 'POSTIT_SET_LAST_TRANSACTION';
 
@@ -156,3 +157,22 @@ export function setLastTransaction(transaction) {
     }
   }
 }
+
+/**
+ * getPost action
+ * @param post
+ * @returns {function(*)}
+ */
+export function getPost(post) {
+  return (dispatch) => {
+    try {
+      dispatch({
+        type: POSTIT_GET_POST,
+        payload: post,
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  }
+}
+

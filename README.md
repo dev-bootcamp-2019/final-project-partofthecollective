@@ -20,6 +20,10 @@ This project was inspired as a kind of Reddit clone (called PostIt), which allow
 - MetaMask v5.3.1
 - React [react-create-app](https://github.com/facebook/create-react-app)
 
+## Bug List
+- Having a async issue with some dependencies and the loading of comment counts in the dasboard.
+- After going to a post's details and posting a comment, a hard refresh is needed to view the comment, due to the same dependency issue and pulling them from a Redux state.
+
 ## Getting started
 1. Assuming you have dependencies installed listed above in the `Environment` section. 
 2. Clone application and go into the cloned project directory.
@@ -217,4 +221,4 @@ web3.eth.sendTransaction({from:  "GANACHE_ACCOUNT", to: "YOUR_METAMASK_ACCOUNT",
 - ~~Update README.md~~
   - ~~Add steps to set up dApp~~
 - ~~Document and add comment to code~~
-- Post details and UI comment functionality
+- ~~Post details and UI comment functionality~~

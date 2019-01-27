@@ -11,13 +11,14 @@ const defaultState = {
 };
 
 class NewPost extends Component {
+
   state = defaultState;
 
   handleChange = (event) => {
     this.setState({
       [event.target.name]: event.target.value,
     });
-  }
+  };
 
   handleNewPost = (e) => {
     if (!e.target.checkValidity()) {
@@ -39,9 +40,9 @@ class NewPost extends Component {
       .then((posts) => {
         return dispatch(getAllPostItPosts(posts));
       });
-    
+
       history.push('/');
-  }
+  };
 
   render() {
     const { web3, accountAddress } = this.props;
@@ -95,7 +96,7 @@ class NewPost extends Component {
                     maxLength={500}
                     />
                 </div>
-                
+
                 <div className="form-group">
                   <button className="btn btn-info btn-md">Submit</button>
                 </div>

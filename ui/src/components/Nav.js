@@ -11,7 +11,7 @@ class Nav extends Component {
     if (event){
       this.props.dispatch(Logout());
     }
-  }
+  };
 
   render() {
     const { authedUser } = this.props;
@@ -26,7 +26,7 @@ class Nav extends Component {
                 <span className="icon-bar"></span>
                 <span className="icon-bar"></span>
               </button>
-              <a className="navbar-brand" href="/">0xley</a>
+              <a className="navbar-brand" href="/">PostIt <sup>by 0xley</sup></a>
             </div>
             <div id="navbar" className="navbar-collapse collapse">
               <ul className="nav navbar-nav">

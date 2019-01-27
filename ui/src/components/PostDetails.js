@@ -1,132 +1,151 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 
+
+import Post from './Post';
+import Comment from './Comment';
 import { notify } from '../utils/helpers';
 import {
-  callMethodMakeUpVote,
-  callMethodMakeDownVote,
-  callMethodGetAllPosts,
   callEventsByName,
   callMethodGetPost,
+  callPostComment,
+  callMethodGetAllPosts,
 } from '../utils/contractAPI';
 
-import { setLastTransaction, getAllPostItPosts } from '../actions/ethContract';
+import {
+  getPost,
+  setLastTransaction,
+  getAllPostItPosts,
+} from '../actions/ethContract';
+
+const defaultState = {
+  postId: 0,
+  title: '',
+  content: '',
+  author: '',
+  votes: 0,
+  authorAddress: '0x00',
+  postComments: [],
+  loaded: false,
+  events: [],
+  comment: '',
+};
 
 class PostDetails extends Component {
 
-  state = {
-    postId: 0,
-    title: '',
-    content: '',
-    author: '',
-    votes: 0,
-    authorAddress: '0x00',
-    postComments: [],
-    loaded: false,
-  };
+  state = defaultState;
 
-  componentDidMount() {
+  async getSetPost() {
     const postId = this.props.match.params.post_id;
-    const { ethContract } = this.props;
-
+    const { ethContract, dispatch } = this.props;
     if (!this.state.loaded) {
-      callMethodGetPost(ethContract.postItContract, postId)
+      await callMethodGetPost(ethContract.postItContract, postId)
       .then((result) => {
-        console.log('result',result);
         this.setState({
           postId: postId,
           title: result[1],
           content: result[2],
-          author: result[3],
-          votes: result[4],
+          votes: result[3].toNumber(),
+          author: result[4],
           authorAddress: result[5],
           loaded: true,
         });
-        console.log(callEventsByName(ethContract.postItContract, 'posts', { postId: postId }));
+        dispatch(getPost(result));
+        return callEventsByName(ethContract.postItContract, 'comments', { postId: postId });
+      }).then((comments) => {
+        console.log(comments);
+        this.setState({
+          postComments: (comments && comments.length > 0) ? comments : [],
+        });
       });
     }
-    
-        //return callEventsByName(ethContract.postItContract, 'posts', { postId: postId });
-      // }).then((comments) => {
-      //   this.setState({
-      //     postComments: (comments && comments.length > 0) ? comments : [],
-      //   });
-      // });
-
-      console.log(this.state);
   }
 
-  upVote(postId) {
-    if (postId > 0) {
-      callMethodMakeUpVote(this.props.ethContract.postItContract, postId, this.props.authedUser.accountAddress)
-        .then((response) => {
-          if (response && !response.success) {
-            notify(response.message.toString(), 'error');
-          } else if(response && response.success) {
-            this.props.dispatch(setLastTransaction(response.tx));
-            notify(response.message.toString(), 'success');
-          }
-          return callMethodGetAllPosts(this.props.ethContract.postItContract, this.props.authedUser.accountAddress);
-        })
-        .then((posts) => {
-          if (posts) {
-            this.props.dispatch(getAllPostItPosts(posts));
-          }
-        });
+  handleChange = (event) => {
+    this.setState({
+      [event.target.name]: event.target.value,
+    });
+  };
+
+  handleComment = (e) => {
+    if (!e.target.checkValidity()) {
+      return;
     }
-  }
-
-  downVote(postId) {
-    if (postId > 0) {
-      callMethodMakeDownVote(this.props.ethContract.postItContract, postId, this.props.authedUser.accountAddress)
-        .then((response) => {
-          if (response && !response.success) {
-            notify(response.message.toString(), 'error');
-          } else if(response && response.success) {
-            this.props.dispatch(setLastTransaction(response.tx));
-            notify(response.message.toString(), 'success');
-          }
-          return callMethodGetAllPosts(this.props.ethContract.postItContract, this.props.authedUser.accountAddress);
-        })
-        .then((posts) => {
-          if (posts) {
-            this.props.dispatch(getAllPostItPosts(posts));
-          }
-        });
-    }
-  }
-
-  async tipAuthor(web3, from, to) {
-    if (from === to) {
-      notify('You can not tip yourself, because you are the author :)', 'error');
-    } else {
-      let tx = await web3.eth.sendTransaction({
-        from: from,
-        to: to,
-        value: web3.utils.toWei(".0009", "ether")
+    e.preventDefault();
+    const { postId, comment } = this.state;
+    const { history, ethContract, accountAddress, dispatch } = this.props;
+    callPostComment(ethContract.postItContract, postId, comment, accountAddress)
+      .then((result) => {
+        if (result && !result.success && result.message) {
+          return notify(result.message.toString(), 'error');
+        }
+        dispatch(setLastTransaction(result.tx), notify(`You have created a comment with blockHash: ${result.tx.receipt.blockHash.toString()}`, 'success'));
+        return callMethodGetAllPosts(ethContract.postItContract, accountAddress);
+      })
+      .then((posts) => {
+        if (posts) {
+          dispatch(getAllPostItPosts(posts));
+          history.push('/posts/' + postId);
+        }
       });
-      if (tx && tx.transactionHash) {
-        notify(`Tip sent to author at: ${to}`, 'success');
-      }
-    }
-  }
+  };
 
   render() {
-    const { authedUser, ethContract } = this.props;
+    const { authedUser, ethContract, dispatch } = this.props;
     const { postId, title, content, author, votes, authorAddress, postComments } = this.state;
+
+    if (!ethContract.postItContract) {
+      return (
+        <div>Loading MetaMask...</div>
+      );
+    } else {
+      this.getSetPost();
+    }
     return(
       <Fragment>
-        <div className="media-body">
-          <h4 className="media-heading">{title}</h4>
-          <div className="media-content">{content}</div>
-          <div className="media-author">Author: {author}</div>
-          <div className="media-author-votes">Vote count: {votes}</div>
-          <div className="media-actions">
-            <span className="glyphicon glyphicon-circle-arrow-up" aria-hidden="true" alt="vote up" onClick={(e) => this.upVote(postId)}></span>
-            <span className="glyphicon glyphicon-circle-arrow-down" aria-hidden="true" alt="vote down" onClick={(e) => this.downVote(postId)}></span>
-            <span className="glyphicon glyphicon-piggy-bank" aria-hidden="true" alt="tip author" onClick={(e) => this.tipAuthor(ethContract.web3, authedUser.accountAddress, authorAddress)}></span>
-            <span className="glyphicon glyphicon-comment" aria-hidden="true" alt="tip author"></span> <span>{postComments.length}</span>
+        <h4 className="text-info">Post Details</h4>
+        <ul className="media-list">
+          <Post
+            key={postId}
+            {...this.props}
+            authedUser={authedUser}
+            ethContract={ethContract}
+            dispatch={dispatch}
+            postId={postId}
+            title={title}
+            content={content}
+            votes={votes}
+            author={author}
+            authorAddress={authorAddress}
+            postComments={postComments}
+          />
+        </ul>
+        <h4 className="text-center text-info">Comments</h4>
+        <form onSubmit={this.handleComment}>
+          <div className="form-group">
+            <label className="col-form-label">Comment</label>
           </div>
+          <div className="form-group">
+            <textarea
+              name="comment"
+              id="comment"
+              placeholder="Post a comment..."
+              onChange={(event) => this.handleChange(event)}
+              value={this.state.comment}
+              className='form-control'
+              maxLength={500}
+            />
+          </div>
+
+          <div className="form-group">
+            <button className="btn btn-info btn-md">Submit</button>
+          </div>
+        </form>
+
+        <div>
+          {postComments ?
+            postComments.map((comment) => <Comment authedUser={authedUser} ethContract={ethContract} commentBody={comment.commentBody} commentAuthor={comment.fullName} commentFromAddress={comment.accountAddress} />)
+          : 'There are no post comments'}
         </div>
       </Fragment>
     );
@@ -134,12 +153,13 @@ class PostDetails extends Component {
 
 }
 
-function mapStateToProps({ authedUser, ethContract }) {
+function mapStateToProps({ authedUser, ethContract, loadingBar }) {
   return {
     authedUser,
     web3: ethContract.web3,
     accountAddress: ethContract.accountAddress,
     ethContract,
+    loadingBar,
   };
 }
 

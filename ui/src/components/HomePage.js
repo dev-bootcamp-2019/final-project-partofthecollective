@@ -18,7 +18,7 @@ import NotFound from './NotFound';
 class HomePage extends Component {
   state = {
     loaded: false,
-  }
+  };
 
   componentDidUpdate() {
     const { authedUser, ethContract, accountAddress, dispatch } = this.props;
@@ -49,7 +49,7 @@ class HomePage extends Component {
             <Switch>
               <Route path='/add' exact component={NewPost} />
               {/*post details route work in progress, but not enough time to complete*/}
-              {/*<Route path='/posts/:post_id' component={PostDetails} />*/}
+              <Route path='/posts/:post_id' component={PostDetails} />
               <Route path='/' exact render={(props) => <Dashboard {...props} authedUser={authedUser} ethContract={ethContract} dispatch={dispatch}  posts={posts} />} />
               <Route path='/404' exact component={NotFound} />
               <Route component={NotFound} />

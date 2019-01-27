@@ -26,6 +26,7 @@ const Dashboard = (props) => {
                                         votes={post.votes}
                                         author={post.author}
                                         authorAddress={post.accountAddress}
+                                        postComments={[]}
                                       />)
               : <li>There are not posts.</li>
             }
@@ -37,6 +38,6 @@ const Dashboard = (props) => {
       }
     </div>
   );
-}
+};
 
 export default (Dashboard);

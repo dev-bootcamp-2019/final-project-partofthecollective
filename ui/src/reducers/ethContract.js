@@ -3,6 +3,7 @@ import {
   POSTIT_CONTRACT_INSTANTIATED,
   POSTIT_POSTS_FETCHED,
   POSTIT_POST_ADDED,
+  POSTIT_GET_POST,
   POSTIT_SET_LAST_TRANSACTION,
   WEB3_CONNECTED_ACCOUNT_SET,
   initialState,
@@ -26,6 +27,11 @@ export default function (state = initialState, action) {
         posts: action.payload,
       };
     case POSTIT_POST_ADDED:
+      return {
+        ...state,
+        post: action.payload,
+      };
+    case POSTIT_GET_POST:
       return {
         ...state,
         post: action.payload,

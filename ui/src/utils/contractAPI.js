@@ -199,3 +199,21 @@ export const callEventsByName = async (postIt, name, passedFilter) => {
     });
   });
 };
+
+/**
+ * async method callPostComment
+ * @param postIt
+ * @param postId
+ * @param commentBody
+ * @param accountAddress
+ * @returns {Promise.<*>}
+ */
+export const callPostComment = async (postIt, postId, commentBody, accountAddress) => {
+  try {
+    const tx = await postIt.addComment(postId, commentBody, { from: accountAddress });
+    return { success: true, tx: tx, message: `You have successfully posted a comment for postId: ${postId}.` };
+  } catch(e) {
+    //console.log(e);
+    return { success: false, message: e };
+  }
+};
