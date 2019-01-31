@@ -874,10 +874,22 @@
       "links": {},
       "address": "0x444811A627c472E7b397E732920E9d30E4030800",
       "transactionHash": "0x75288b5c77a792c4fb1b43107a8c375afa830dec0ed15ac8c34e73e9fe1fff7b"
+    },
+    "1548631611419": {
+      "events": {},
+      "links": {},
+      "address": "0x132aEad24a6a3f4F0FAd09cf4855BD89399D8333",
+      "transactionHash": "0x2917ac40bf6d74e0bfa5fb74e3ebf40b79407f11f916ec8a2016bdc7761e3630"
+    },
+    "1548632223934": {
+      "events": {},
+      "links": {},
+      "address": "0xCCf123854098a214Cc1Bae63892e3A9d75b300bF",
+      "transactionHash": "0x0c3c09577151c9abc9bd3f647e67c725f25e0566f02fa2965d0d78470436acac"
     }
   },
   "schemaVersion": "3.0.0",
-  "updatedAt": "2019-01-26T14:17:31.258Z",
+  "updatedAt": "2019-01-27T23:38:00.278Z",
   "devdoc": {
     "methods": {
       "allowance(address,address)": {
